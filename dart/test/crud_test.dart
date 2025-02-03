@@ -119,7 +119,8 @@ void main() {
             'op': 'PATCH',
             'type': 'items',
             'id': 'test_id',
-            'data': {'column0': 'new_value'}
+            'data': {'column0': 'new_value'},
+            'source': {'column0': 'column0'}
           }));
 
       // 4. Test delete

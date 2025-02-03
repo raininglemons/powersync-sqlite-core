@@ -327,7 +327,7 @@ BEGIN
   UPDATE "ps_data__lists"
       SET data = json_object('description', NEW."description")
       WHERE id = NEW.id;
-  INSERT INTO powersync_crud_(data) VALUES(json_object('op', 'PATCH', 'type', 'lists', 'id', NEW.id, 'data', json(powersync_diff(json_object('description', OLD."description"), json_object('description', NEW."description")))));
+  INSERT INTO powersync_crud_(data) VALUES(json_object('op', 'PATCH', 'type', 'lists', 'id', NEW.id, 'data', json(powersync_diff(json_object('description', OLD."description"), json_object('description', NEW."description"))), 'source', json(powersync_diff(json_object('description', NEW."description"), json_object('description', OLD."description")))));
   INSERT INTO ps_oplog(bucket, op_id, op, row_type, row_id, hash, superseded)
   SELECT '$local',
           1,
@@ -383,7 +383,7 @@ BEGIN
   UPDATE "ps_data__lists"
       SET data = json_object('description', NEW."description")
       WHERE id = NEW.id;
-  INSERT INTO powersync_crud_(data) VALUES(json_object('op', 'PATCH', 'type', 'lists', 'id', NEW.id, 'data', json(powersync_diff(json_object('description', OLD."description"), json_object('description', NEW."description")))));
+  INSERT INTO powersync_crud_(data) VALUES(json_object('op', 'PATCH', 'type', 'lists', 'id', NEW.id, 'data', json(powersync_diff(json_object('description', OLD."description"), json_object('description', NEW."description"))), 'source', json(powersync_diff(json_object('description', NEW."description"), json_object('description', OLD."description")))));
   INSERT OR IGNORE INTO ps_updated_rows(row_type, row_id) VALUES('lists', NEW.id);
   INSERT OR REPLACE INTO ps_buckets(name, last_op, target_op) VALUES('$local', 0, 9223372036854775807);
 END
