@@ -232,10 +232,10 @@ BEGIN
   UPDATE {:}
       SET data = {:}
       WHERE id = NEW.id;
-  INSERT INTO powersync_crud_(data) VALUES(json_object('op', 'PATCH', 'type', {:}, 'id', NEW.id, 'data', json(powersync_diff({:}, {:}))));
+  INSERT INTO powersync_crud_(data) VALUES(json_object('op', 'PATCH', 'type', {:}, 'id', NEW.id, 'data', json(powersync_diff({:}, {:})), 'source', json(powersync_diff({:}, {:}))));
   INSERT OR IGNORE INTO ps_updated_rows(row_type, row_id) VALUES({:}, NEW.id);
   INSERT OR REPLACE INTO ps_buckets(name, last_op, target_op) VALUES('$local', 0, {:});
-END", trigger_name, quoted_name, internal_name, json_fragment_new, type_string, json_fragment_old, json_fragment_new, type_string, MAX_OP_ID);
+END", trigger_name, quoted_name, internal_name, json_fragment_new, type_string, json_fragment_old, json_fragment_new, json_fragment_new, json_fragment_old, type_string, MAX_OP_ID);
         Ok(trigger)
     } else if local_only {
         let trigger = format!(
