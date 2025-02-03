@@ -1,9 +1,13 @@
 import 'dart:ffi';
+
 import 'package:sqlite3/common.dart';
 import 'package:sqlite3/open.dart' as sqlite_open;
 import 'package:sqlite3/sqlite3.dart';
+
 const defaultSqlitePath = 'libsqlite3.so.0';
+
 const libPath = '../target/debug';
+
 CommonDatabase openTestDatabase() {
   sqlite_open.open.overrideFor(sqlite_open.OperatingSystem.linux, () {
     return DynamicLibrary.open('libsqlite3.so.0');
@@ -16,6 +20,7 @@ CommonDatabase openTestDatabase() {
   sqlite3.ensureExtensionLoaded(extension);
   return sqlite3.open(':memory:');
 }
+
 String getLibraryForPlatform({String? path = "."}) {
   switch (Abi.current()) {
     case Abi.androidArm:
