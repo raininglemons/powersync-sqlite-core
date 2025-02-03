@@ -1,31 +1,22 @@
 import 'dart:ffi';
-import 'dart:io';
-
 import 'package:sqlite3/common.dart';
 import 'package:sqlite3/open.dart' as sqlite_open;
 import 'package:sqlite3/sqlite3.dart';
-
 const defaultSqlitePath = 'libsqlite3.so.0';
-
 const libPath = '../target/debug';
-
 CommonDatabase openTestDatabase() {
   sqlite_open.open.overrideFor(sqlite_open.OperatingSystem.linux, () {
     return DynamicLibrary.open('libsqlite3.so.0');
   });
   sqlite_open.open.overrideFor(sqlite_open.OperatingSystem.macOS, () {
-    return DynamicLibrary.open('/Users/domengland/.local/lib/libsqlite3.dylib');
+    return DynamicLibrary.open('libsqlite3.dylib');
   });
   var lib = DynamicLibrary.open(getLibraryForPlatform(path: libPath));
   var extension = SqliteExtension.inLibrary(lib, 'sqlite3_powersync_init');
   sqlite3.ensureExtensionLoaded(extension);
   return sqlite3.open(':memory:');
 }
-
 String getLibraryForPlatform({String? path = "."}) {
-  // fix for tests failing on mac
-  final absolutePath = Directory(path ?? '.').absolute.path;
-
   switch (Abi.current()) {
     case Abi.androidArm:
     case Abi.androidArm64:
@@ -33,7 +24,7 @@ String getLibraryForPlatform({String? path = "."}) {
       return '$path/libpowersync.so';
     case Abi.macosArm64:
     case Abi.macosX64:
-      return '$absolutePath/libpowersync.dylib';
+      return '$path/libpowersync.dylib';
     case Abi.linuxX64:
     case Abi.linuxArm64:
       return '$path/libpowersync.so';
